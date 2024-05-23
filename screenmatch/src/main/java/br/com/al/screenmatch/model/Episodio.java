@@ -1,8 +1,5 @@
-package br.com.alura.screenmatch.model;
+package br.com.al.screenmatch.model;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 

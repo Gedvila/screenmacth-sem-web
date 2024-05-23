@@ -1,16 +1,14 @@
-package br.com.alura.screenmatch.principal;
+package br.com.al.screenmatch.principal;
 
-import br.com.alura.screenmatch.model.DadosEpisodio;
-import br.com.alura.screenmatch.model.DadosSerie;
-import br.com.alura.screenmatch.model.DadosTemporada;
-import br.com.alura.screenmatch.model.Episodio;
-import br.com.alura.screenmatch.service.ConsumoAPI;
-import br.com.alura.screenmatch.service.ConverteDados;
+import br.com.al.screenmatch.model.DadosEpisodio;
+import br.com.al.screenmatch.model.DadosSerie;
+import br.com.al.screenmatch.model.DadosTemporada;
+import br.com.al.screenmatch.model.Episodio;
+import br.com.al.screenmatch.service.ConsumoAPI;
+import br.com.al.screenmatch.service.ConverteDados;
 
-import java.security.cert.LDAPCertStoreParameters;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
