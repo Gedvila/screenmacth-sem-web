@@ -23,14 +23,20 @@ public class Principal {
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
     private final String API_KEY = "&apikey=2e4f75ca";
     private ConverteDados conversor = new ConverteDados();
+    private int ano;
 
     public void exibeMenu(){
-        System.out.println("Digite o nome da série que quer obter informações: ");
+        System.out.println("\nDigite o nome da série que quer obter informações: ");
         var nomeSerie = leitura.nextLine();
         var json = consumoAPI.obterDados(ENDERECO +nomeSerie.replace(" ","+")
                 .toLowerCase() + API_KEY);
         DadosSerie dados = conversor.obterDados(json, DadosSerie.class);
-        System.out.println(dados);
+        dados.toString();
+        System.out.println("\nSérie: " + dados.titulo() +
+                "\nTemporadas: " + dados.totalDeTemporadas() +
+                "\nAvaliação da série: " + dados.avaliacao() +
+                "\n"
+        );
 
         List<DadosTemporada> temporadas = new ArrayList<>();
 
@@ -39,47 +45,36 @@ public class Principal {
              json = consumoAPI.obterDados(ENDERECO +nomeSerie.replace(" ","+")
                     .toLowerCase()+"&season="+ i + API_KEY);
             DadosTemporada dadosTemporada = conversor.obterDados(json, DadosTemporada.class);
+            dadosTemporada.toString();
             temporadas.add(dadosTemporada);
-
+            ;
         }
 
-        temporadas.forEach(System.out::println);
-
-        temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.titulo())));
 
         List<DadosEpisodio> dadosEpisodios = temporadas.stream()
                 .flatMap(t-> t.episodios().stream())
                 .collect(Collectors.toList());
 
-        System.out.println("\n Top 5 episodios");
-        dadosEpisodios.stream()
-                .filter(e -> !e.avaliacao().equalsIgnoreCase("N/A"))
-                .sorted(Comparator.comparing(DadosEpisodio::avaliacao).reversed())
-                .limit(5)
-                .forEach(System.out::println);
 
         List<Episodio> episodios = temporadas.stream()
                 .flatMap(t -> t.episodios().stream()
                         .map(d -> new Episodio(t.numero(), d))
                 ).collect(Collectors.toList());
 
-        episodios.forEach(System.out::println);
-
-        System.out.println("\nA partir de qual ano você deseja ver os episodios? ");
-        var ano = leitura.nextInt();
-        leitura.nextLine();
-
         LocalDate dataBusca = LocalDate.of(ano,1,1);
 
         DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        episodios.stream()
-                .filter(e -> e.getDataLancamento() != null && e.getDataLancamento().isAfter(dataBusca))
-                .forEach(e-> System.out.println("\nTemporada: " +e.getTemporada() +
-                        "\nEpisodio: " + e.getTitulo() +
-                        "\nData de lançamento: " + e.getDataLancamento().format(formatador)
-                        ));
+        episodios.forEach(f ->{
+            System.out.println("\nTemporada: " + f.getTemporada() +
+                    "\nTítulo: " + f.getTitulo() +
+                    "\nEpisódio: " + f.getNumeroEpisodio() +
+                    "\nAvaliação: " + f.getAvaliacao() +
+                    "\nData de lançamento: " + f.getDataLancamento().format(formatador)
+                    );
+        });
 
-    }
+
+   }
 }
 
